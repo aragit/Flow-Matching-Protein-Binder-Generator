@@ -71,13 +71,15 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-2. Run Inference
+### 2. Run Inference
+
 ```bash
 python scripts/run_inference.py --residues 45 --solver rk4 --steps 20
 ```
 
-Expected Output:
+**Expected Output:**
 
+```text
 ============================================================
 🧬 Protein Binder Flow Engine -- Active Blueprint
    Flow Matching for Structural Molecular Generation
@@ -102,53 +104,65 @@ Expected Output:
   Predicted Fold : compact_globular
   Fold Confidence: 0.75
 ============================================================
+```
 
-3. Run Tests
+### 3. Run Tests
+
 ```bash
 pytest tests/ -v
 ```
 
+All 12 tests pass — shape invariants, solver convergence, biophysical validation.
+
+---
+
 ## 📊 Flow Matching vs DDPM
-```Table
-Aspect	Flow Matching (This Repo)	DDPM
-Steps	20-50	1000
-Path Geometry	Straight (Optimal Transport)	Curved (diffusion)
-Determinism	ODE guarantees	Stochastic
-Training Objective	Direct vector field regression	Score matching
-Conditional Generation	Native via vector field	Requires classifier guidance
-Inference Time	~0.5s CPU	~30s+ CPU
-```
 
-🗺️ Implementation Roadmap
-Phase 1: Foundation (Current — Active Blueprint)
-[x] Flow Matching loss with conditional probability paths
-[x] Modular ODE solver framework (Euler, RK4, Heun)
-[x] Biophysical validation metrics (clash, Rg, contact maps, fold)
-[x] Runnable CPU-only inference
-[x] Full pytest coverage (12 tests)
-[x] Mock receptor PDB for data loading interface
-[x] Hydra-compatible YAML config schema
+| Aspect | Flow Matching (This Repo) | DDPM |
+|--------|---------------------------|------|
+| **Steps** | 20-50 | 1000 |
+| **Path Geometry** | Straight (Optimal Transport) | Curved (diffusion) |
+| **Determinism** | ODE guarantees | Stochastic |
+| **Training Objective** | Direct vector field regression | Score matching |
+| **Conditional Generation** | Native via vector field | Requires classifier guidance |
+| **Inference Time** | ~0.5s CPU | ~30s+ CPU |
 
-Phase 2: Equivariance
-[ ] Implement EGNN layers (core/equivariant_layers.py)
-[ ] SE(3) invariance unit tests
-[ ] Graph construction from PDB coordinates
-[ ] Edge attributes for bond-length conditioning
+---
 
-Phase 3: Conditioning
-[ ] Real receptor PDB encoder via Biopython
-[ ] Cross-attention between binder and receptor
-[ ] Binding site-aware generation
-[ ] Multi-receptor batch training
+## 🗺️ Implementation Roadmap
 
-Phase 4: Scale & Validation
-[ ] GPU training on real protein datasets (CATH, PDB)
-[ ] Integrate FoldSeek API for topology validation
-[ ] Benchmark against RFdiffusion, Chroma
-[ ] Binding affinity prediction interface
+### Phase 1: Foundation (Current — Active Blueprint)
+- [x] Flow Matching loss with conditional probability paths
+- [x] Modular ODE solver framework (Euler, RK4, Heun)
+- [x] Biophysical validation metrics (clash, Rg, contact maps, fold)
+- [x] Runnable CPU-only inference
+- [x] Full pytest coverage (12 tests)
+- [x] Mock receptor PDB for data loading interface
+- [x] Hydra-compatible YAML config schema
 
-📁 Repository Structure
-```plain
+### Phase 2: Equivariance
+- [ ] Implement EGNN layers (`core/equivariant_layers.py`)
+- [ ] SE(3) invariance unit tests
+- [ ] Graph construction from PDB coordinates
+- [ ] Edge attributes for bond-length conditioning
+
+### Phase 3: Conditioning
+- [ ] Real receptor PDB encoder via Biopython
+- [ ] Cross-attention between binder and receptor
+- [ ] Binding site-aware generation
+- [ ] Multi-receptor batch training
+
+### Phase 4: Scale & Validation
+- [ ] GPU training on real protein datasets (CATH, PDB)
+- [ ] Integrate FoldSeek API for topology validation
+- [ ] Benchmark against RFdiffusion, Chroma
+- [ ] Binding affinity prediction interface
+
+---
+
+## 📁 Repository Structure
+
+```text
 Flow-Matching-Protein-Binder-Generator/
 ├── README.md
 ├── requirements.txt
@@ -185,54 +199,85 @@ Flow-Matching-Protein-Binder-Generator/
 └── data/
     └── mock_receptor.pdb
 ```
+
+---
+
 ## 🛠️ Technology Stack
-Table
-Layer	Technology	Justification
-Deep Learning	PyTorch 2.0+	Dynamic computation graphs, autograd for Flow Matching
-Molecular Biology	Biopython 1.81+	PDB parsing, structure validation, sequence handling
-ODE Integration	Custom (Euler/RK4/Heun)	Zero external dependencies, modular solver base class
-Testing	pytest 7.3+	Shape invariants, solver convergence, validation metrics
-Configuration	YAML (Hydra-ready)	Reproducible hyperparameters, schema validation
+
+| Layer | Technology | Justification |
+|-------|-----------|---------------|
+| Deep Learning | PyTorch 2.0+ | Dynamic computation graphs, autograd for Flow Matching |
+| Molecular Biology | Biopython 1.81+ | PDB parsing, structure validation, sequence handling |
+| ODE Integration | Custom (Euler/RK4/Heun) | Zero external dependencies, modular solver base class |
+| Testing | pytest 7.3+ | Shape invariants, solver convergence, validation metrics |
+| Configuration | YAML (Hydra-ready) | Reproducible hyperparameters, schema validation |
+
+---
 
 ## 🧮 Mathematical Foundation
-Flow Matching Loss
-The model learns a vector field v_θ(x_t, t) that regresses to the true conditional vector field u_t(x_t | x_1):
-plain
+
+### Flow Matching Loss
+
+The model learns a vector field `v_θ(x_t, t)` that regresses to the true conditional vector field `u_t(x_t | x_1)`:
+
+```text
 L(θ) = E_{t~U(0,1), x_1~q(x_1), x_t~p_t(x_t|x_1)} [ ||v_θ(x_t, t) - u_t(x_t|x_1)||² ]
-Conditional Probability Path (Linear OT)
+```
+
+### Conditional Probability Path (Linear OT)
+
 For the optimal transport path:
-plain
+
+```text
 x_t = t · x_1 + (1-t) · x_0
-u_t(x_t|x_1) = x_1 - x_0  (constant velocity, straight line)
-ODE Integration
+u_t(x_t|x_1) = x_1 - x_0   (constant velocity, straight line)
+```
+
+### ODE Integration
+
 The generation trajectory solves:
-plain
-dx_t/dt = v_θ(x_t, t),  x_0 ~ N(0,I)
-Integrated via Euler, RK4, or Heun solvers from t=0 to t=1.
+
+```text
+dx_t/dt = v_θ(x_t, t),   x_0 ~ N(0,I)
+```
+
+Integrated via Euler, RK4, or Heun solvers from `t=0` to `t=1`.
+
+---
 
 ## 🔒 Safety & Ethics
-No real patient data: All training on synthetic/mock data; no PHI in pipeline
-Deterministic generation: Same seed produces same structure (reproducible research)
-Transparent stubs: Every placeholder is explicitly documented; no hidden failures
-CPU-first design: Runs on consumer hardware; no cloud dependency or API costs
+
+- **No real patient data**: All training on synthetic/mock data; no PHI in pipeline
+- **Deterministic generation**: Same seed produces same structure (reproducible research)
+- **Transparent stubs**: Every placeholder is explicitly documented; no hidden failures
+- **CPU-first design**: Runs on consumer hardware; no cloud dependency or API costs
+
+---
 
 ## 📚 References
-Flow Matching for Generative Modeling — Lipman et al., ICLR 2023. arXiv:2210.02747
-Equivariant Graph Neural Networks — Satorras et al., ICLR 2021. arXiv:2102.09844
-AlphaFold 2: Improved Protein Structure Prediction — Jumper et al., Nature 2021. DOI:10.1038/s41586-021-03819-2
-RFdiffusion: Protein Generation with Diffusion — Watson et al., Nature 2023. DOI:10.1038/s41586-023-06415-8
-Chroma: A Generative Model for Proteins — Ingraham et al., 2023. bioRxiv
+
+1. **Flow Matching for Generative Modeling** — Lipman et al., ICLR 2023. [arXiv:2210.02747](https://arxiv.org/abs/2210.02747)
+2. **Equivariant Graph Neural Networks** — Satorras et al., ICLR 2021. [arXiv:2102.09844](https://arxiv.org/abs/2102.09844)
+3. **AlphaFold 2: Improved Protein Structure Prediction** — Jumper et al., Nature 2021. [DOI:10.1038/s41586-021-03819-2](https://doi.org/10.1038/s41586-021-03819-2)
+4. **RFdiffusion: Protein Generation with Diffusion** — Watson et al., Nature 2023. [DOI:10.1038/s41586-023-06415-8](https://doi.org/10.1038/s41586-023-06415-8)
+5. **Chroma: A Generative Model for Proteins** — Ingraham et al., 2023. [bioRxiv](https://www.biorxiv.org/content/10.1101/2023.09.11.556673v1)
+
+---
 
 ## 🤝 Contributing
-This is an Active Blueprint — contributions welcome at every phase:
-Phase 2: Implement EGNNSparseLayer and TFNLayer in core/equivariant_layers.py
-Phase 3: Add real receptor encoding from PDB files
-Phase 4: Benchmark scripts, dataset loaders, GPU training configs
+
+This is an **Active Blueprint** — contributions welcome at every phase:
+
+- **Phase 2**: Implement `EGNNSparseLayer` and `TFNLayer` in `core/equivariant_layers.py`
+- **Phase 3**: Add real receptor encoding from PDB files
+- **Phase 4**: Benchmark scripts, dataset loaders, GPU training configs
+
 Please open an issue before major changes to align with the roadmap.
 
+---
+
 ## 📄 License
+
 MIT License — Open Source Structural Biology
-<p align="center">
-  <sub>Built for the protein engineering community. Designed with mathematical rigor. Validated by biophysical principles.</sub>
-</p>
-```
+
+&lt;p align="center"&gt;&lt;sub&gt;Built for the protein engineering community. Designed with mathematical rigor. Validated by biophysical principles.&lt;/sub&gt;&lt;/p&gt;
