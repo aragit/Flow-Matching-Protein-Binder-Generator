@@ -1,0 +1,32 @@
+# Base configuration for Flow Matching Protein Binder Generator
+# Hydra-compatible schema
+
+project:
+  name: "Flow-Matching-Protein-Binder-Generator"
+  version: "0.1.0-blueprint"
+
+model:
+  name: "FlowMatcherNetwork"
+  hidden_dim: 128
+  num_layers: 4
+  time_embed_dim: 64
+  receptor_dim: 0  # Set > 0 for conditional generation
+
+training:
+  batch_size: 32
+  learning_rate: 0.0001
+  epochs: 100
+  device: "cpu"  # Change to "cuda" when available
+
+sampling:
+  solver: "rk4"  # euler | heun | rk4
+  steps: 20
+  schedule: "linear"  # linear | cosine
+
+data:
+  num_residues: 45
+  mock_receptor_path: "data/mock_receptor.pdb"
+
+validation:
+  clash_threshold: 2.0
+  contact_threshold: 8.0

@@ -1,0 +1,25 @@
+HEADER    MOCK RECEPTOR FOR FLOW MATCHING BINDER GENERATION
+TITLE     SYNTHETIC TARGET SITE - ALPHA HELIX FRAGMENT
+COMPND    MOL_ID: 1; CHAIN: A; FRAGMENT: RESIDUES 1-20
+SOURCE    SYNTHETIC
+REMARK 1  This is a mock PDB file for Active Blueprint demonstration.
+REMARK 2  No biological significance. Used for data loading interface testing.
+REMARK 3  Generated for: Flow-Matching-Protein-Binder-Generator
+REMARK 4  Status: Active Blueprint - Interface stub, not real structure
+ATOM      1  N   ALA A   1      11.104   6.779  -6.797  1.00  0.00           N
+ATOM      2  CA  ALA A   1      10.294   6.449  -5.607  1.00  0.00           C
+ATOM      3  C   ALA A   1       9.220   7.498  -5.381  1.00  0.00           C
+ATOM      4  O   ALA A   1       8.459   7.318  -4.417  1.00  0.00           O
+ATOM      5  CB  ALA A   1      11.168   6.420  -4.371  1.00  0.00           C
+ATOM      6  N   ALA A   2       9.220   8.570  -6.184  1.00  0.00           N
+ATOM      7  CA  ALA A   2       8.268   9.620  -6.030  1.00  0.00           C
+ATOM      8  C   ALA A   2       7.670   9.837  -4.660  1.00  0.00           C
+ATOM      9  O   ALA A   2       6.786   9.075  -4.242  1.00  0.00           O
+ATOM     10  CB  ALA A   2       8.900  10.917  -6.478  1.00  0.00           C
+ATOM     11  N   ALA A   3       8.090  10.850  -3.997  1.00  0.00           N
+ATOM     12  CA  ALA A   3       7.570  11.130  -2.672  1.00  0.00           C
+ATOM     13  C   ALA A   3       6.380  10.230  -2.340  1.00  0.00           C
+ATOM     14  O   ALA A   3       5.550  10.620  -1.510  1.00  0.00           O
+ATOM     15  CB  ALA A   3       8.650  10.980  -1.600  1.00  0.00           C
+TER
+END
