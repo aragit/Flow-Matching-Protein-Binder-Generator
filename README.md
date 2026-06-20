@@ -16,9 +16,9 @@
 
 ## 📐 Active Blueprint
 
-&gt; **Architecture documented, core components stubbed, runnable skeleton.**
-&gt;
-&gt; SE(3) equivariant layers and FoldSeek API integration are interface-ready but require GPU cluster + API keys for full activation. This repo runs entirely on CPU with zero external API dependencies.
+> **Architecture documented, core components stubbed, runnable skeleton.**
+>
+> SE(3) equivariant layers and FoldSeek API integration are interface-ready but require GPU cluster + API keys for full activation. This repo runs entirely on CPU with zero external API dependencies.
 
 ---
 
