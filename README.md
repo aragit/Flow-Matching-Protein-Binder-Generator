@@ -273,4 +273,4 @@ Please open an issue before major changes to align with the roadmap.
 
 MIT License — Open Source Structural Biology
 
-&lt;p align="center"&gt;&lt;sub&gt;Built for the protein engineering community. Designed with mathematical rigor. Validated by biophysical principles.&lt;/sub&gt;&lt;/p&gt;
+<p align="center"><sub>Built for the protein engineering community. Designed with mathematical rigor. Validated by biophysical principles.</sub></p>
