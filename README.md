@@ -1,20 +1,16 @@
 # 🧬 Flow-Matching-Protein-Binder-Generator
 
-&lt;p align="center"&gt;
-  &lt;b&gt;A minimal, deterministic implementation of Flow Matching for structural molecular generation.&lt;/b&gt;
-&lt;/p&gt;
+<p align="center"><b>A minimal, deterministic implementation of Flow Matching for structural molecular generation.</b></p>
 
-&lt;p align="center"&gt;
-  &lt;sub&gt;PyTorch · Biopython · Flow Matching Primitives · Optimal Transport&lt;/sub&gt;
-&lt;/p&gt;
+<p align="center"><sub>PyTorch · Biopython · Flow Matching Primitives · Optimal Transport</sub></p>
 
-&lt;p align="center"&gt;
-  &lt;img src="https://img.shields.io/badge/Status-📐%20Active%20Blueprint-blue" alt="Active Blueprint"&gt;
-  &lt;img src="https://img.shields.io/badge/PyTorch-2.0+-red?logo=pytorch" alt="PyTorch"&gt;
-  &lt;img src="https://img.shields.io/badge/Python-3.9+-blue?logo=python" alt="Python"&gt;
-  &lt;img src="https://img.shields.io/badge/Tests-12%20passing-brightgreen" alt="Tests"&gt;
-  &lt;img src="https://img.shields.io/badge/License-MIT-green" alt="MIT"&gt;
-&lt;/p&gt;
+<p align="center">
+  <img src="https://img.shields.io/badge/Status-📐%20Active%20Blueprint-blue" alt="Active Blueprint">
+  <img src="https://img.shields.io/badge/PyTorch-2.0+-red?logo=pytorch" alt="PyTorch">
+  <img src="https://img.shields.io/badge/Python-3.9+-blue?logo=python" alt="Python">
+  <img src="https://img.shields.io/badge/Tests-12%20passing-brightgreen" alt="Tests">
+  <img src="https://img.shields.io/badge/License-MIT-green" alt="MIT">
+</p>
 
 ---
 
