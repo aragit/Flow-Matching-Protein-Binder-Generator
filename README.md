@@ -218,32 +218,25 @@ Flow-Matching-Protein-Binder-Generator/
 
 ### Flow Matching Loss
 
-The model learns a vector field `v_θ(x_t, t)` that regresses to the true conditional vector field `u_t(x_t | x_1)`:
+The model learns a vector field $v_\theta(x_t, t)$ that regresses to the true conditional vector field $u_t(x_t \mid x_1)$:
 
-```text
-L(θ) = E_{t~U(0,1), x_1~q(x_1), x_t~p_t(x_t|x_1)} [ ||v_θ(x_t, t) - u_t(x_t|x_1)||² ]
-```
+$$L(\theta) = \mathbb{E}_{t \sim U(0,1),\, x_1 \sim q(x_1),\, x_t \sim p_t(x_t \mid x_1)} \left[ \left\| v_\theta(x_t, t) - u_t(x_t \mid x_1) \right\|^2 \right]$$
 
 ### Conditional Probability Path (Linear OT)
 
 For the optimal transport path:
 
-```text
-x_t = t · x_1 + (1-t) · x_0
-u_t(x_t|x_1) = x_1 - x_0   (constant velocity, straight line)
-```
+$$x_t = t \cdot x_1 + (1-t) \cdot x_0$$
+
+$$u_t(x_t \mid x_1) = x_1 - x_0 \quad \text{(constant velocity, straight line)}$$
 
 ### ODE Integration
 
 The generation trajectory solves:
 
-```text
-dx_t/dt = v_θ(x_t, t),   x_0 ~ N(0,I)
-```
+$$\frac{dx_t}{dt} = v_\theta(x_t, t), \quad x_0 \sim \mathcal{N}(0, I)$$
 
-Integrated via Euler, RK4, or Heun solvers from `t=0` to `t=1`.
-
----
+Integrated via Euler, RK4, or Heun solvers from $t=0$ to $t=1$.
 
 ## 🔒 Safety & Ethics
 
